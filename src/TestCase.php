@@ -16,7 +16,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
         $reflectionClass = new \ReflectionClass($object);
         $reflectionMethod = $reflectionClass->getMethod($methodName);
         $reflectionMethod->setAccessible(true);
-        return $reflectionMethod->invoke($object, $arguments);
+        return $reflectionMethod->invoke($object, ...$arguments);
     }
 
     /**
