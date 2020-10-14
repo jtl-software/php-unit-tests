@@ -32,4 +32,19 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
         $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($object, $value);
     }
+
+    /**
+     * @param string $className
+     * @return object
+     * @throws TestCaseException
+     * @throws \ReflectionException
+     */
+    protected function createInstanceWithoutConstructor(string $className)
+    {
+        if(!class_exists($className)) {
+            throw TestCaseException::classNotFound($className);
+        }
+
+        return (new \ReflectionClass($className))->newInstanceWithoutConstructor();
+    }
 }
