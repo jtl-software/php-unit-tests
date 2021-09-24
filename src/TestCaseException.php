@@ -3,7 +3,6 @@
 
 namespace Jtl\UnitTest;
 
-
 class TestCaseException extends \Exception
 {
     public const

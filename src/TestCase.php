@@ -23,13 +23,19 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
      * @param object $object
      * @param string $propertyName
      * @return mixed
-     * @throws \ReflectionException
      */
     public function getPropertyValueFromObject(object $object, string $propertyName)
     {
         $reflectionClass = new \ReflectionClass($object);
+        do {
+            if ($reflectionClass->hasProperty($propertyName)) {
+                break;
+            }
+        } while ($reflectionClass = $reflectionClass->getParentClass());
+
         $reflectionProperty = $reflectionClass->getProperty($propertyName);
         $reflectionProperty->setAccessible(true);
+
         return $reflectionProperty->getValue($object);
     }
 
@@ -55,7 +61,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
      */
     protected function createInstanceWithoutConstructor(string $className)
     {
-        if(!class_exists($className)) {
+        if (!class_exists($className)) {
             throw TestCaseException::classNotFound($className);
         }
 
