@@ -15,13 +15,14 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
     {
         $reflectionMethod = new \ReflectionMethod($classNameOrObject, $methodName);
         $reflectionMethod->setAccessible(true);
-        return $reflectionMethod->invoke($classNameOrObject, ...$arguments);
+        return $reflectionMethod->invoke(is_object($classNameOrObject) ? $classNameOrObject : null, ...$arguments);
     }
 
     /**
      * @param string|object $classNameOrObject
      * @param string $propertyName
      * @return mixed
+     * @throws \ReflectionException
      */
     public function retrievePropertyValue($classNameOrObject, string $propertyName)
     {
