@@ -5,28 +5,27 @@ namespace Jtl\UnitTest;
 abstract class TestCase extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @param object $object
+     * @param string|object $classNameOrObject
      * @param string $methodName
      * @param mixed ...$arguments
      * @return mixed
      * @throws \ReflectionException
      */
-    protected function invokeMethodFromObject(object $object, string $methodName, ...$arguments)
+    protected function invokeMethod($classNameOrObject, string $methodName, ...$arguments)
     {
-        $reflectionClass = new \ReflectionClass($object);
-        $reflectionMethod = $reflectionClass->getMethod($methodName);
+        $reflectionMethod = new \ReflectionMethod($classNameOrObject, $methodName);
         $reflectionMethod->setAccessible(true);
-        return $reflectionMethod->invoke($object, ...$arguments);
+        return $reflectionMethod->invoke($classNameOrObject, ...$arguments);
     }
 
     /**
-     * @param object $object
+     * @param string|object $classNameOrObject
      * @param string $propertyName
      * @return mixed
      */
-    public function getPropertyValueFromObject(object $object, string $propertyName)
+    public function retrievePropertyValue($classNameOrObject, string $propertyName)
     {
-        $reflectionClass = new \ReflectionClass($object);
+        $reflectionClass = new \ReflectionClass($classNameOrObject);
         do {
             if ($reflectionClass->hasProperty($propertyName)) {
                 break;
@@ -36,21 +35,20 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
         $reflectionProperty = $reflectionClass->getProperty($propertyName);
         $reflectionProperty->setAccessible(true);
 
-        return $reflectionProperty->getValue($object);
+        return $reflectionProperty->getValue($classNameOrObject);
     }
 
     /**
-     * @param object $object
+     * @param string|object $classNameOrObject
      * @param string $propertyName
      * @param mixed $value
      * @throws \ReflectionException
      */
-    protected function setPropertyValueFromObject(object $object, string $propertyName, $value): void
+    protected function setProperty($classNameOrObject, string $propertyName, $value): void
     {
-        $reflectionClass = new \ReflectionClass($object);
-        $reflectionProperty = $reflectionClass->getProperty($propertyName);
+        $reflectionProperty = new \ReflectionProperty($classNameOrObject, $propertyName);
         $reflectionProperty->setAccessible(true);
-        $reflectionProperty->setValue($object, $value);
+        $reflectionProperty->setValue($classNameOrObject, $value);
     }
 
     /**
